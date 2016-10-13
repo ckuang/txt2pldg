@@ -14,10 +14,6 @@
  *= require_self
  */
 
- /* =============================================================================
-    HTML5 CSS Reset Minified - Eric Meyer
-    ========================================================================== */
-
  html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}
  body{line-height:1}
  article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}
@@ -55,20 +51,207 @@
  }
 
  canvas{
- 	position: relative;
    display:block;
    vertical-align:bottom;
+   opacity: .6;
  }
 
  /* ---- particles.js container ---- */
 
  #particles-js{
- 	position: relative;
+   position: relative;
    width: 100%;
    height: 100%;
-   background-color: #134B97;
+   background-color: #eaeaea;
    background-image: url('');
    background-size: cover;
    background-position: 50% 50%;
    background-repeat: no-repeat;
+ }
+
+
+ /* ---- text container ---- */
+
+ .container {
+ 	position: absolute;
+ 	width: 100%;
+ 	height: 100%;
+ 	z-index: 1000;
+ }
+
+
+ h1 {
+   margin-top: 50px;
+   text-align: center;
+ 	 font-size: 96px;
+ 	 color: #6ec829;
+ }
+
+ h2 {
+  margin-top: 80px;
+ 	font-size: 36px;
+ 	font-weight: bold;
+  color: black;
+  text-align: center;
+ }
+
+#total {
+  margin-top: 10px;
+}
+
+.bar {
+  display: block;
+  width: 750px;
+  height: 50px;
+  margin: 0 auto;
+}
+
+.labels {
+  display: block;
+  width: 750px;
+  margin: 0 auto;
+}
+
+.label {
+  display: block;
+  font-weight: bold;
+  font-size: 18px;
+  float: left;
+  width: 250px;
+  text-align: right;
+}
+
+.outer-bar-1 {
+  display: block;
+  float: left;
+  width: 250px;
+  height: 50px;
+  background-color: white;
+  border-radius: 5px;
+}
+.outer-bar-2 {
+  display: block;
+  float: left;
+  width: 250px;
+  height: 50px;
+  background-color: white;
+  border-radius: 5px;
+}
+.outer-bar-3 {
+  display: block;
+  float: left;
+  width: 250px;
+  height: 50px;
+  background-color: white;
+  border-radius: 5px;
+}
+
+.inner-bar {
+  display: block;
+  width: 0px;
+  height: 50px;
+  background-color: #6ec829;
+  border-radius: 5px;
+}
+
+.total-pledged {
+  margin-top: 30px;
+  text-align: center;
+  color: black;
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.amount {
+  color: #6ec829;
+}
+
+.message {
+  font-weight: bold;
+  text-align: center;
+  margin-top: 70px;
+}
+
+.donor-amount {
+  font-size: 42px;
+}
+
+.donor-message {
+  font-style: italic;
+  font-size: 36px;
+}
+
+
+ /*#total {
+   margin-top: 60px;
+   text-align: center;
+   font-size:30px;
+ }*/
+
+ #donation {
+   text-align: center;
+   margin-top: 100px;
+
+   .display {
+     font-size: 30px;
+   }
+
+   .message {
+     font-size: 20px;
+   }
+
+ }
+
+ .progress-container {
+   width: 60%;
+   margin: 0px auto;
+   margin-top: 50px;
+   height: 40px;
+   position:relative;
+ }
+
+ p.goal {
+   float: left;
+
+   &.first {
+     margin-left: 30%;
+   }
+
+   &.second {
+     margin-left: 26%;
+   }
+
+   &.third {
+     position:absolute;
+     bottom: -51px;
+     right: -26px;
+   }
+ }
+
+ #progress {
+   width: 100%;
+   height: 100%;
+   background: #fff;
+   white-space:nowrap;
+   overflow: hidden;
+   margin-bottom: 20px;
+ }
+
+ .progress-bar {
+   -webkit-transition-duration: 0.4s;
+   -moz-transition-duration: 0.4s;
+   -o-transition-duration: 0.4s;
+   transition-duration: 0.4s;
+ }
+
+ #first-tier {
+   background-color: darken(green, 4%);
+ }
+
+ #second-tier {
+   background-color: darken(green, 8%);
+ }
+
+ #third-tier {
+   background-color: darken(green, 12%);
  }

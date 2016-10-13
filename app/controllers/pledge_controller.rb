@@ -40,13 +40,13 @@ class PledgeController < ApplicationController
 
   def sequence(idx)
     p1 = Proc.new {
-      amount = params[:Body].gsub("$", "")
+      amount = params[:Body].gsub("$", "").gsub(",", "")
       raise "Invalid amount type" if amount.to_i == 0
       d = SmsDonor.create_from_twilio_response(params)
       pledge = SmsPledge.create(amount: amount.to_f)
       d.pledges << pledge
       response = Twilio::TwiML::Response.new do |r|
-        r.Message "Thanks for your contribution! "
+        r.Message "We appreciate your contribution! What's your name so we know who to thank?"
       end
     }
 
