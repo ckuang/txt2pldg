@@ -24,17 +24,33 @@ var Total = React.createClass({
       }, 2000)
   },
   render: function() {
+    let total = parseInt(this.state.total)
+    let widthA = 0, widthB = 0, widthC = 0
+    if (total > 0 && total <= 10000) {
+      widthA = (total / 10000) * 250
+    } else if (total > 10000 && total <= 20000) {
+      widthA = 250
+      widthB = ((total - 10000) / 10000) * 250
+    } else if (total > 20000 && total < 30000) {
+      widthA = 250
+      widthB = 250
+      widthC = ((total - 20000) / 10000) * 250
+    } else if (total > 30000) {
+      widthA = 250
+      widthB = 250
+      widthC = 250
+    }
     return (
       <div>
         <div className="bar">
           <div className="outer-bar-1">
-            <div className="inner-bar" style={{width: (parseInt(this.state.total) / 30000 * 725 )+ "px"}}></div>
+            <div className="inner-bar light-green" style={{width: widthA + "px"}}></div>
           </div>
           <div className="outer-bar-2">
-            <div className="inner-bar" style={{width: (parseInt(this.state.total) / 30000 * 725 )+ "px"}}></div>
+            <div className="inner-bar green" style={{width: widthB + "px"}}></div>
           </div>
           <div className="outer-bar-3">
-            <div className="inner-bar" style={{width: (parseInt(this.state.total) / 30000 * 725 )+ "px"}}></div>
+            <div className="inner-bar dark-green" style={{width: widthC + "px"}}></div>
           </div>
         </div>
 
@@ -67,12 +83,14 @@ var Message = React.createClass({
             that.setState({pledges: response.pledges})
           }
         })
-      }, 2000)
+      }, 1000)
     setInterval(function() {
         if (that.state.idx + 1 < that.state.pledges.length) {
           that.setState({idx: that.state.idx + 1})
+        } else {
+          that.setState({idx: 0})
         }
-      }, 3000)
+      }, 1500)
   },
   render: function() {
     if (!this.state.pledges) {
@@ -81,7 +99,7 @@ var Message = React.createClass({
       var person = this.state.pledges[this.state.idx]
       return (
         <div className="message">
-          <div className="donor-amount">{person.donor.name} just pledged ${numberWithCommas(person.amount)}</div>
+          <div className="donor-amount">{person.donor.name} pledged ${numberWithCommas(person.amount)}</div>
           <div className="donor-message">"{person.message}"</div>
         </div>
       )

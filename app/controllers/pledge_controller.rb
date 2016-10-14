@@ -21,15 +21,16 @@ class PledgeController < ApplicationController
       rescue
         throw_invalid_amount.call
       end
-    elsif donor.messages.count == 1
+    elsif donor.messages.count % 4 == 1
       response = sequence(1)
 
-    elsif donor.messages.count == 2
+    elsif donor.messages.count % 4 == 2
       response = sequence(2)
 
-    elsif donor.messages.count == 3
+    elsif donor.messages.count % 4 == 3
       response = sequence(3)
-
+    elsif !donor.nil? and donor.messages.count % 4 == 0
+      response = sequence(0)
     end
 
     donor.messages << SmsDonorMessage.create_message_from_twilio(params)

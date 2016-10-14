@@ -150,8 +150,17 @@
   display: block;
   width: 0px;
   height: 50px;
-  background-color: #6ec829;
   border-radius: 5px;
+}
+
+.light-green {
+  background: #A6CB45;
+}
+.green {
+  background: #71B238;
+}
+.dark-green {
+  background: #6A8347;
 }
 
 .total-pledged {

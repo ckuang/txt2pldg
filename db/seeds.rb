@@ -5,11 +5,10 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-# 
-# charles = SmsDonor.create!(name: "Charles Kuang", phone_number: "7182256718", email: "ckuang@c4q.nyc")
-# will = SmsDonor.create!(name: "Will Muller", phone_number: "325123553", email: "will@c4q.nyc")
-# liz = SmsDonor.create!(name: "Liz Bartlow", phone_number: "23412353", email: "liz@c4q.nyc")
 #
-# pledge1 = SmsPledge.create!(sms_donor_id: 1, amount: 1000, message: "C4Q is awesome")
-# pledge2 = SmsPledge.create!(sms_donor_id: 2, amount: 2500, message: "Because! ")
-# pledge3 = SmsPledge.create!(sms_donor_id: 3, amount: 6000, message: "Great Mission!")
+charles = SmsDonor.create!(name: "Jukay Hsu", phone_number: "7182256718", email: "ckuang@c4q.nyc")
+will = SmsDonor.create!(name: "Dave Yang", phone_number: "325123553", email: "will@c4q.nyc")
+
+
+pledge1 = SmsPledge.create!(sms_donor_id: 1, amount: 1000, message: "🍔")
+pledge2 = SmsPledge.create!(sms_donor_id: 2, amount: 2500, message: "🍟")
