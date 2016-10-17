@@ -1,4 +1,3 @@
-require 'byebug'
 require 'twilio-ruby'
 
 class PledgeController < ApplicationController
