@@ -29,7 +29,11 @@ class PledgeController < ApplicationController
     elsif donor.messages.count % 4 == 3
       response = sequence(3)
     elsif !donor.nil? and donor.messages.count % 4 == 0
-      response = sequence(0)
+      begin
+        response = sequence(0)
+      rescue
+        throw_invalid_amount.call
+      end
     end
 
     donor.messages << SmsDonorMessage.create_message_from_twilio(params)
@@ -40,7 +44,7 @@ class PledgeController < ApplicationController
 
   def sequence(idx)
     p1 = Proc.new {
-      amount = params[:Body].gsub("$", "").gsub(",", "")
+      amount = params[:Body].gsub("$", "").gsub(",", "").gsub("-", "")
       raise "Invalid amount type" if amount.to_i == 0
       d = SmsDonor.create_from_twilio_response(params)
       pledge = SmsPledge.create(amount: amount.to_f)
