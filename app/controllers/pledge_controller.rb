@@ -12,32 +12,39 @@ class PledgeController < ApplicationController
       response = Twilio::TwiML::Response.new do |r|
         r.Message INVALID_AMOUNT_ERROR_MESSAGE
       end
+
       render_twiml response
     }
     if donor.nil?
       begin
         response = sequence(0)
+        donor.messages << SmsDonorMessage.create_message_from_twilio(params)
+        render_twiml response
       rescue
         throw_invalid_amount.call
       end
     elsif donor.messages.count % 4 == 1
       response = sequence(1)
-
+      donor.messages << SmsDonorMessage.create_message_from_twilio(params)
+          render_twiml response
     elsif donor.messages.count % 4 == 2
       response = sequence(2)
-
+      donor.messages << SmsDonorMessage.create_message_from_twilio(params)
+          render_twiml response
     elsif donor.messages.count % 4 == 3
       response = sequence(3)
+      donor.messages << SmsDonorMessage.create_message_from_twilio(params)
+          render_twiml response
     elsif !donor.nil? and donor.messages.count % 4 == 0
       begin
         response = sequence(0)
+        donor.messages << SmsDonorMessage.create_message_from_twilio(params)
+            render_twiml response
       rescue
         throw_invalid_amount.call
       end
     end
 
-    donor.messages << SmsDonorMessage.create_message_from_twilio(params)
-    render_twiml response
   end
 
   private
