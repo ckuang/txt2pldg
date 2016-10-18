@@ -1,6 +1,5 @@
 var React = require('react')
 var ReactDOM = require('react-dom')
-var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
