@@ -1,7 +1,7 @@
 class MessageController < ApplicationController
   def show
     render json: {
-      pledges: SmsPledge.where("donor is not null")
+      pledges: SmsPledge.joins(:donor).where("name is not null")
     }
   end
 end
