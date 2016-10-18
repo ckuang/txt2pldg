@@ -153,14 +153,28 @@
   border-radius: 5px;
 }
 
-.light-green {
-  background: #A6CB45;
-}
 .green {
-  background: #71B238;
+  background: #89D94C;
+  background: -webkit-linear-gradient(left,  #89D94C , #6EC829);
+  background: -o-linear-gradient(right,  #89D94C, #6EC829);
+  background: -moz-linear-gradient(right,  #89D94C, #6EC829);
+  background: linear-gradient(to right,  #89D94C , #6EC829);
 }
+
 .dark-green {
-  background: #6A8347;
+  background: #6EC829;
+  background: -webkit-linear-gradient(left,  #6EC829 , #51A511);
+  background: -o-linear-gradient(right,  #6EC829, #51A511);
+  background: -moz-linear-gradient(right,  #6EC829, #51A511);
+  background: linear-gradient(to right,  #6EC829 , #51A511);
+}
+
+.light-green {
+  background: #A8E976;
+  background: -webkit-linear-gradient(left,  #A8E976 , #89D94C);
+  background: -o-linear-gradient(right,  #A8E976, #89D94C);
+  background: -moz-linear-gradient(right,  #A8E976, #89D94C);
+  background: linear-gradient(to right,  #A8E976 , #89D94C);
 }
 
 .total-pledged {
@@ -197,19 +211,6 @@
    font-size:30px;
  }*/
 
- #donation {
-   text-align: center;
-   margin-top: 100px;
-
-   .display {
-     font-size: 30px;
-   }
-
-   .message {
-     font-size: 20px;
-   }
-
- }
 
  .progress-container {
    width: 60%;
@@ -244,23 +245,4 @@
    white-space:nowrap;
    overflow: hidden;
    margin-bottom: 20px;
- }
-
- .progress-bar {
-   -webkit-transition-duration: 0.4s;
-   -moz-transition-duration: 0.4s;
-   -o-transition-duration: 0.4s;
-   transition-duration: 0.4s;
- }
-
- #first-tier {
-   background-color: darken(green, 4%);
- }
-
- #second-tier {
-   background-color: darken(green, 8%);
- }
-
- #third-tier {
-   background-color: darken(green, 12%);
  }

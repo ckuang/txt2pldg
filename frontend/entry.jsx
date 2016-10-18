@@ -1,6 +1,6 @@
 var React = require('react')
 var ReactDOM = require('react-dom')
-
+var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -72,24 +72,26 @@ var Message = React.createClass({
   getInitialState: function() {
     return ({idx: 0, pledges: null})
   },
-  componentDidMount: function() {
+  fetchMessages: function() {
     var that = this
-    setInterval(
-      function(){
-          $.ajax({
-          url: '/message',
-          type: 'get',
-          success: function(response) {
-            that.setState({pledges: response.pledges})
-          }
-        })
-      }, 1000)
-    setInterval(function() {
-        if (that.state.idx + 1 < that.state.pledges.length) {
+    $.ajax({
+      url: '/message',
+      type: 'get',
+      success: function(response) {
+        that.setState({pledges: response.pledges})
+        if (that.state.idx + 1 < response.pledges.length) {
           that.setState({idx: that.state.idx + 1})
         } else {
           that.setState({idx: 0})
         }
+      }
+    })
+  },
+  componentDidMount: function() {
+    var that = this
+    setInterval(
+      function(){
+        that.fetchMessages()
       }, 1500)
   },
   render: function() {
@@ -97,11 +99,17 @@ var Message = React.createClass({
       return(<div/>)
     } else {
       var person = this.state.pledges[this.state.idx]
-      return (
-        <div className="message">
-          <div className="donor-amount">{person.donor.name} pledged ${numberWithCommas(person.amount)}</div>
-          <div className="donor-message">"{person.message}"</div>
-        </div>
+      var message = this.state.pledges[this.state.idx].message
+      if (message) {
+        var output = <div className="donor-message">"{message}"</div>
+      } else {
+        var output = <div/>
+      }
+    return (
+          <div className="message">
+            <div className="donor-amount">{person.donor.name} pledged ${numberWithCommas(person.amount)}</div>
+            {output}
+          </div>
       )
     }
   }

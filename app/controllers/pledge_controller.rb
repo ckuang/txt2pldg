@@ -1,3 +1,4 @@
+require 'byebug'
 require 'twilio-ruby'
 
 class PledgeController < ApplicationController
@@ -52,12 +53,10 @@ class PledgeController < ApplicationController
 
     p2 = Proc.new {
       donor.update_attribute(:name, params[:Body])
+      output = "Thanks " + donor.name + "! Why do you want to support C4Q?(your message will be displayed on the public pledge board)"
       response = Twilio::TwiML::Response.new do |r|
-        r.Message "Thanks, Person. Let us know why you want to support C4Q(this message will be displayed on our public pledge board - 140 characters max)"
+        r.Message output
       end
-
-      puts response
-      return response
     }
 
     p3 = Proc.new {
