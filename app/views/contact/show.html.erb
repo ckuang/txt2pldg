@@ -1,0 +1,4 @@
+<% @pledges.each do |pledge|  %>
+  <div style="color: white"><%= pledge.donor.name %> : <%= pledge.donor.phone_number %> : <%= pledge.amount %> : <%= pledge.donor.email %>><div>
+
+<% end %>

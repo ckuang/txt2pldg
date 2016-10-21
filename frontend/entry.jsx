@@ -1,5 +1,6 @@
 var React = require('react')
 var ReactDOM = require('react-dom')
+import {Router, Route, browserHistory} from 'react-router'
 
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

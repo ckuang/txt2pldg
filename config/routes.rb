@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root "static_pages#root"
   get '/total', to: 'total#show'
   get '/message', to: 'message#show'
+  get '/pledges', to: 'contact#show'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
