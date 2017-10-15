@@ -24,33 +24,13 @@ var Total = React.createClass({
       }, 2000)
   },
   render: function() {
-    let total = parseInt(this.state.total)
-    let widthA = 0, widthB = 0, widthC = 0
-    if (total > 0 && total <= 10000) {
-      widthA = (total / 10000) * 250
-    } else if (total > 10000 && total <= 20000) {
-      widthA = 250
-      widthB = ((total - 10000) / 10000) * 250
-    } else if (total > 20000 && total < 30000) {
-      widthA = 250
-      widthB = 250
-      widthC = ((total - 20000) / 10000) * 250
-    } else if (total > 30000) {
-      widthA = 250
-      widthB = 250
-      widthC = 250
-    }
+    let total = (parseInt(this.state.total) / 50000) * 1000
+
     return (
       <div>
         <div className="bar">
-          <div className="outer-bar-1">
-            <div className="inner-bar light-green" style={{width: widthA + "px"}}></div>
-          </div>
-          <div className="outer-bar-2">
-            <div className="inner-bar green" style={{width: widthB + "px"}}></div>
-          </div>
-          <div className="outer-bar-3">
-            <div className="inner-bar dark-green" style={{width: widthC + "px"}}></div>
+          <div className="outer-bar">
+            <div className="inner-bar green" style={{width: total + "px"}}></div>
           </div>
         </div>
 
@@ -58,6 +38,8 @@ var Total = React.createClass({
           <div className="label">$10k</div>
           <div className="label">$20k</div>
           <div className="label">$30k</div>
+          <div className="label">$40k</div>
+          <div className="label">$50k</div>
         </div>
 
         <div className="total-pledged">

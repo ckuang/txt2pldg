@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.string   "phone_number"
     t.string   "name"
     t.string   "email"
+    t.integer "steps"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end
@@ -40,6 +41,8 @@ ActiveRecord::Schema.define(version: 0) do
   create_table "sms_pledges", force: :cascade do |t|
     t.integer  "sms_donor_id"
     t.text     "message"
+    t.boolean "message_present"
+    t.string "payment"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.float    "amount"

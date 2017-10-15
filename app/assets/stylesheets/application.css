@@ -39,7 +39,7 @@
  html,body{
  	width:100%;
  	height:100%;
- 	background:#111;
+ 	background: #134B97;
  }
 
  html{
@@ -56,21 +56,12 @@
    opacity: .6;
  }
 
- /* ---- particles.js container ---- */
-
- #particles-js{
-   position: relative;
-   width: 100%;
-   height: 100%;
-   background-color: #eaeaea;
-   background-image: url('');
-   background-size: cover;
-   background-position: 50% 50%;
-   background-repeat: no-repeat;
- }
-
 
  /* ---- text container ---- */
+
+#techbash5 {
+  width: 500px;
+}
 
  .container {
  	position: absolute;
@@ -101,14 +92,14 @@
 
 .bar {
   display: block;
-  width: 750px;
+  width: 1000px;
   height: 50px;
   margin: 0 auto;
 }
 
 .labels {
   display: block;
-  width: 750px;
+  width: 1000px;
   margin: 0 auto;
 }
 
@@ -117,30 +108,14 @@
   font-weight: bold;
   font-size: 18px;
   float: left;
-  width: 250px;
+  width: 200px;
   text-align: right;
 }
 
-.outer-bar-1 {
+.outer-bar {
   display: block;
   float: left;
-  width: 250px;
-  height: 50px;
-  background-color: white;
-  border-radius: 5px;
-}
-.outer-bar-2 {
-  display: block;
-  float: left;
-  width: 250px;
-  height: 50px;
-  background-color: white;
-  border-radius: 5px;
-}
-.outer-bar-3 {
-  display: block;
-  float: left;
-  width: 250px;
+  width: 1000px;
   height: 50px;
   background-color: white;
   border-radius: 5px;
@@ -155,10 +130,6 @@
 
 .green {
   background: #89D94C;
-  background: -webkit-linear-gradient(left,  #89D94C , #6EC829);
-  background: -o-linear-gradient(right,  #89D94C, #6EC829);
-  background: -moz-linear-gradient(right,  #89D94C, #6EC829);
-  background: linear-gradient(to right,  #89D94C , #6EC829);
 }
 
 .dark-green {
