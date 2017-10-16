@@ -5,9 +5,8 @@ class PledgeController < ApplicationController
   after_filter :set_header
   skip_before_action :verify_authenticity_token
 
-  INVALID_AMOUNT_ERROR_MESSAGE = "That doesn't seem like a valid pledge amount. Please enter a number (eg. $25)"
-  INVALID_RESPONSE_ERROR_MESSAGE = "Sorry, that was an invalid response. Would you like to display a message?(Reply with Y or N)"
-
+  INVALID_AMOUNT_ERROR_MESSAGE = "Sorry, that doesn't seem like a valid pledge amount. Please enter a number (eg. $25)"
+  INVALID_CHOICE_MESSAGE = "Sorry, that doesn't seem like a valid choice. Please reply 1 for Venmo instructions or reply 2 for C4Q's donation page."
   def receive_message
     throw_invalid_amount = Proc.new {
       response = Twilio::TwiML::Response.new do |r|
@@ -16,13 +15,15 @@ class PledgeController < ApplicationController
 
       render_twiml response
     }
-    throw_invalid_response = Proc.new {
+    throw_invalid_choice = Proc.new {
       response = Twilio::TwiML::Response.new do |r|
-        r.Message INVALID_RESPONSE_ERROR_MESSAGE
+        r.Message INVALID_CHOICE_MESSAGE
       end
 
       render_twiml response
     }
+
+
 
     if donor.nil?
       begin
@@ -45,13 +46,13 @@ class PledgeController < ApplicationController
       donor.messages << SmsDonorMessage.create_message_from_twilio(params)
           render_twiml response
     elsif donor.steps % 5 == 4
-      response = sequence(4)
-      donor.messages << SmsDonorMessage.create_message_from_twilio(params)
-          render_twiml response
-    elsif donor.steps % 5 == 0
-      response = sequence(5)
-      donor.messages << SmsDonorMessage.create_message_from_twilio(params)
-          render_twiml response
+      begin
+        response = sequence(4)
+        donor.messages << SmsDonorMessage.create_message_from_twilio(params)
+        render_twiml response
+      rescue
+        throw_invalid_choice.call
+      end
     elsif !donor.nil? and donor.messages.count % 4 == 0
       begin
         response = sequence(0)
@@ -82,33 +83,13 @@ class PledgeController < ApplicationController
     p2 = Proc.new {
       donor.update_attribute(:name, params[:Body])
       donor.update_attribute(:steps, (donor.steps + 1))
-      output = "Would you like to display a message?(Reply with Y or N)"
+      output = "Who has inspired you tonight? Display a message for an honoree or alumni!"
       response = Twilio::TwiML::Response.new do |r|
         r.Message output
       end
     }
 
-    p3 = Proc.new {
-      if (params[:Body] == "Y" || params[:Body] == "y")
-        message_present = true
-      elsif (params[:Body] == "N" || params[:Body] == "n")
-        message_present = false
-      end
-      donor.pledges.first.update_attribute(:message_present, message_present)
-      if donor.pledges.first.message_present
-        donor.update_attribute(:steps, (donor.steps + 1))
-        response = Twilio::TwiML::Response.new do |r|
-          r.Message "Enter your message."
-        end
-      else
-        donor.update_attribute(:steps, (donor.steps + 2))
-        response = Twilio::TwiML::Response.new do |r|
-          r.Message "What's your email?"
-        end
-      end
-    }
-
-    p4 = Proc.new {
+    p3 =  Proc.new {
       donor.pledges.first.update_attribute(:message, params[:Body])
       donor.update_attribute(:steps, (donor.steps + 1))
       response = Twilio::TwiML::Response.new do |r|
@@ -116,7 +97,7 @@ class PledgeController < ApplicationController
       end
     }
 
-    p5 = Proc.new {
+    p4 = Proc.new {
       donor.update_attribute(:email, params[:Body])
       donor.update_attribute(:steps, (donor.steps + 1))
       response = Twilio::TwiML::Response.new do |r|
@@ -124,22 +105,28 @@ class PledgeController < ApplicationController
       end
     }
 
-    p6 = Proc.new {
+    p5 = Proc.new {
       donor.pledges.first.update_attribute(:payment, params[:Body])
       donor.update_attribute(:steps, 1)
-      if (donor.pledges.first.payment == 1 || donor.pledges.first.payment == "1")
+      if (donor.pledges.first.amount > 2999)
         response = Twilio::TwiML::Response.new do |r|
-          r.Message "Please venmo @c4qnyc your pledge amount. Thanks for your contribution and enjoy the rest of your evening!"
+          r.Message "The C4Q team will follow up with you to fulfill your pledge. Thank you for your generous support."
         end
-      else
+      elsif (donor.pledges.first.payment == 1 || donor.pledges.first.payment == "1")
+        response = Twilio::TwiML::Response.new do |r|
+          r.Message "Please Venmo @c4qnyc your pledge amount. Thanks for your contribution and enjoy the rest of your evening!"
+        end
+      elsif (donor.pledges.first.payment == 2 || donor.pledges.first.payment == "2")
         response = Twilio::TwiML::Response.new do |r|
           r.Message "Please visit http://c4q.nyc/donate. Thanks for your contribution and enjoy the rest of your evening!"
         end
+      else
+        raise "Invalid choice"
       end
     }
 
 
-    [p1, p2, p3, p4, p5, p6][idx].call
+    [p1, p2, p3, p4, p5][idx].call
   end
 
   def donor
