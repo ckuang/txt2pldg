@@ -28,6 +28,9 @@ var Total = React.createClass({
 
     return (
       <div>
+      <div className="total-pledged">
+        Total Pledged: <div className="amount">${numberWithCommas(parseInt(this.state.total))}</div>
+      </div>
         <div className="bar">
           <div className="outer-bar">
             <div className="inner-bar green" style={{width: total + "px"}}></div>
@@ -42,9 +45,7 @@ var Total = React.createClass({
           <div className="label">$50k</div>
         </div>
 
-        <div className="total-pledged">
-          Total Pledged: <span className="amount">${numberWithCommas(parseInt(this.state.total))}</span>
-        </div>
+
       </div>
     )
   }
@@ -101,8 +102,18 @@ var App = React.createClass({
   render: function() {
     return(
       <div>
+
+        <div id="instruction">
+        Text Your Pledge Amount to (347) 527 - 4222
+        <br/>
+              <Message />
+              </div>
+
+
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
         <Total />
-        <Message />
+
       </div>
     )
   }
