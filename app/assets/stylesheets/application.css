@@ -59,14 +59,14 @@
 
  @font-face {
    font-family: "Chalet";
-   src: url('./chalet.otf');
+   src: font-url('./chalet.otf');
  }
 
 
   @font-face {
     font-family: "Chalet";
     font-weight: bold;
-    src: url('./chalet-bold.otf');
+    src: font-url('./chalet-bold.otf');
   }
 
  @font-face {
@@ -106,7 +106,11 @@
   margin-top: 80px;
  	font-size: 36px;
   color: white;
-  text-align: center;
+  width: 800px;
+ }
+
+ #inner-instruction {
+   text-align: center;
  }
 
 #total {
@@ -130,9 +134,20 @@
   display: block;
   font-size: 24px;
   float: left;
-  width: 200px;
+  width: 166.6666666px;
   text-align: right;
 }
+
+.arrow-down {
+  width: 0;
+  height: 0;
+  margin: auto;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #89D94C;
+}
+
+
 
 .outer-bar {
   display: block;
@@ -140,15 +155,14 @@
   width: 1000px;
   height: 50px;
   background-color: white;
-  border-radius: 5px;
 }
 
 .inner-bar {
   display: block;
   width: 0px;
   height: 50px;
-  border-radius: 5px;
 }
+
 
 .green {
   background: #89D94C;
@@ -170,7 +184,15 @@
   background: linear-gradient(to right,  #A8E976 , #89D94C);
 }
 
+.total-container {
+  width: 1000px;
+  position: relative;
+  margin: 0 auto;
+}
+
 .total-pledged {
+  position: relative;
+  width: 250px;
   margin-top: 30px;
   text-align: center;
   color: black;
@@ -182,9 +204,12 @@
   color: #6ec829;
 }
 
+.green-font {
+  color: #89D94C;
+}
+
 .message {
   margin-top: 70px;
-  float: right;
 }
 
 .donor-amount {

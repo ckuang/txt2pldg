@@ -23,44 +23,48 @@ class PledgeController < ApplicationController
       render_twiml response
     }
 
-
+    send_message = Proc.new {
+      donor.messages << SmsDonorMessage.create_message_from_twilio(params)
+      render_twiml response
+    }
 
     if donor.nil?
       begin
         response = sequence(0)
-        donor.messages << SmsDonorMessage.create_message_from_twilio(params)
-        render_twiml response
+        send_message.call
       rescue
         throw_invalid_amount.call
       end
-    elsif donor.steps % 5 == 1
+    elsif donor.steps >= 5 && (donor.steps - 5) % 2 == 0 && SmsPledge.sum(:amount)where(sms_donor_id: donor.id)
+      response = sequence(6)
+      send_message.call
+    elsif donor.steps >= 5 && (donor.steps - 5) % 2 == 0
+      response = sequence(7)
+      send_message.call
+    elsif donor.steps >= 5 && (donor.steps - 5) % 2 == 1
+      response = sequence(4)
+      send_message.call
+    elsif donor.steps == 1
       response = sequence(1)
-      donor.messages << SmsDonorMessage.create_message_from_twilio(params)
-          render_twiml response
-    elsif donor.steps % 5 == 2
+      send_message.call
+    elsif donor.steps == 2
       response = sequence(2)
-      donor.messages << SmsDonorMessage.create_message_from_twilio(params)
-          render_twiml response
-    elsif donor.steps % 5 == 3
+      send_message.call
+    elsif donor.steps == 3 && donor.pledges.first.amount > 2999
+      response = sequence(5)
+      send_message.call
+    elsif donor.steps == 3
       response = sequence(3)
-      donor.messages << SmsDonorMessage.create_message_from_twilio(params)
-          render_twiml response
-    elsif donor.steps % 5 == 4
+      send_message.call
+    elsif donor.steps == 4
       begin
         response = sequence(4)
-        donor.messages << SmsDonorMessage.create_message_from_twilio(params)
-        render_twiml response
+        send_message.call
       rescue
         throw_invalid_choice.call
       end
-    elsif !donor.nil? and donor.messages.count % 4 == 0
-      begin
-        response = sequence(0)
-        donor.messages << SmsDonorMessage.create_message_from_twilio(params)
-            render_twiml response
-      rescue
-        throw_invalid_amount.call
-      end
+    elsif
+
     end
 
   end
@@ -107,16 +111,13 @@ class PledgeController < ApplicationController
 
     p5 = Proc.new {
       donor.pledges.first.update_attribute(:payment, params[:Body])
-      donor.update_attribute(:steps, 1)
-      if (donor.pledges.first.amount > 2999)
+      if (donor.pledges.first.payment == 1 || donor.pledges.first.payment == "1")
+        donor.update_attribute(:steps, 1)
         response = Twilio::TwiML::Response.new do |r|
-          r.Message "The C4Q team will follow up with you to fulfill your pledge. Thank you for your generous support."
-        end
-      elsif (donor.pledges.first.payment == 1 || donor.pledges.first.payment == "1")
-        response = Twilio::TwiML::Response.new do |r|
-          r.Message "Please Venmo @c4qnyc your pledge amount. Thanks for your contribution and enjoy the rest of your evening!"
+          r.Message "Please visit https://venmo.com to send @c4qnyc your pledge amount. Thanks for your contribution and enjoy the rest of your evening!"
         end
       elsif (donor.pledges.first.payment == 2 || donor.pledges.first.payment == "2")
+        donor.update_attribute(:steps, 1)
         response = Twilio::TwiML::Response.new do |r|
           r.Message "Please visit http://c4q.nyc/donate. Thanks for your contribution and enjoy the rest of your evening!"
         end
@@ -125,8 +126,37 @@ class PledgeController < ApplicationController
       end
     }
 
+    p6 = Proc.new {
+      donor.update_attribute(:email, params[:Body])
+      donor.update_attribute(:steps, (donor.steps + 2))
+      response = Twilio::TwiML::Response.new do |r|
+        r.Message "The C4Q team will follow up with you to fulfill your pledge. Thank you for your generous support."
+      end
+    }
 
-    [p1, p2, p3, p4, p5][idx].call
+    p7 = Proc.new {
+      amount = params[:Body].gsub("$", "").gsub(",", "").gsub("-", "")
+      raise "Invalid amount type" if amount.to_i == 0
+      pledge = SmsPledge.create(amount: amount.to_f)
+      donor.update_attribute(:steps, 2)
+      d.pledges << pledge
+      response = Twilio::TwiML::Response.new do |r|
+        r.Message "Thanks for pledging again! The C4Q team will follow up with you to fulfill your pledge."
+      end
+    }
+    p8 = Proc.new {
+      amount = params[:Body].gsub("$", "").gsub(",", "").gsub("-", "")
+      raise "Invalid amount type" if amount.to_i == 0
+      pledge = SmsPledge.create(amount: amount.to_f)
+      donor.update_attribute(:steps, 1)
+      d.pledges << pledge
+      response = Twilio::TwiML::Response.new do |r|
+        r.Message "Thanks for pledging again! How would you like to fulfill your pledge? Reply 1 for Venmo instructions. Reply 2 to donate through C4Q's webpage."
+      end
+    }
+
+
+    [p1, p2, p3, p4, p5, p6][idx].call
   end
 
   def donor

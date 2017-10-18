@@ -18,18 +18,25 @@ var Total = React.createClass({
           url: '/total',
           type: 'get',
           success: function(response) {
-            that.setState({total: response.total})
+            if (response.total > 25000) {
+              that.setState({total: response.total + 20000})
+            } else {
+              that.setState({total: response.total})
+            }
           }
         })
       }, 2000)
   },
   render: function() {
-    let total = (parseInt(this.state.total) / 50000) * 1000
-
+    let total = (parseInt(this.state.total) / 60000) * 1000
+    if (total > 1000) {
+      total = 1000
+    }
     return (
-      <div>
-      <div className="total-pledged">
+      <div className="total-container">
+      <div className="total-pledged" style={{left: (total - 125) + "px"}}>
         Total Pledged: <div className="amount">${numberWithCommas(parseInt(this.state.total))}</div>
+        <div className="arrow-down"/>
       </div>
         <div className="bar">
           <div className="outer-bar">
@@ -43,6 +50,7 @@ var Total = React.createClass({
           <div className="label">$30k</div>
           <div className="label">$40k</div>
           <div className="label">$50k</div>
+          <div className="label">$60k</div>
         </div>
 
 
@@ -75,7 +83,7 @@ var Message = React.createClass({
     setInterval(
       function(){
         that.fetchMessages()
-      }, 1500)
+      }, 3000)
   },
   render: function() {
     if (!this.state.pledges) {
@@ -90,7 +98,7 @@ var Message = React.createClass({
       }
     return (
           <div className="message">
-            <div className="donor-amount">{person.donor.name} pledged ${numberWithCommas(person.amount)}</div>
+            <div className="donor-amount">{person.donor.name} just pledged ${numberWithCommas(person.amount)}</div>
             {output}
           </div>
       )
@@ -104,10 +112,13 @@ var App = React.createClass({
       <div>
 
         <div id="instruction">
-        Text Your Pledge Amount to (347) 527 - 4222
-        <br/>
-              <Message />
-              </div>
+          <div id="inner-instruction">
+            Text Your Pledge Amount to
+            <div className="green-font">(347) 527 - 4222 </div>
+            <br/>
+            <Message />
+          </div>
+        </div>
 
 
         <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
